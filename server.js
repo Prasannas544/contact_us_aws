@@ -32,7 +32,11 @@ app.post('/submit-form-data', (req, res) => {
   res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   const { name, email, topic, message } = req.body;
   run(name, email, topic, message).catch(console.dir);
-  res.send("success");
+  let data = {
+    status: '200',
+    msg: 'Contact made successfully'
+  }
+  res.json(data)
 });
 
 // Start server listening on specified port
