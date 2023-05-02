@@ -3,8 +3,10 @@ const { MongoClient, ServerApiVersion } = require('mongodb');
 const uri = "mongodb+srv://prasannas544:OVnRMt463dBd5jTT@cluster0.lbgpcrz.mongodb.net/?retryWrites=true&w=majority";
 const express = require('express');
 const bodyParser = require('body-parser');
+const cors = require('cors');
 
 const app = express();
+app.use(cors());
 
 const client = new MongoClient(uri, {
   serverApi: {
@@ -19,16 +21,18 @@ const client = new MongoClient(uri, {
 app.use(bodyParser.json());
 app.get('/', (req, res) => {
   res.send('Hello World!');
+
 });
 
 // Set up endpoint to handle POST requests
 app.post('/submit-form-data', (req, res) => {
   // Extract form data from the request body
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
+  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
   const { name, email, topic, message } = req.body;
-
   run(name, email, topic, message).catch(console.dir);
-  // Define spreadsheet ID and range to write to
-  res.send(req.body);
+  res.send("success");
 });
 
 // Start server listening on specified port
