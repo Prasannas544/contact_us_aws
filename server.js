@@ -6,7 +6,9 @@ const bodyParser = require('body-parser');
 const cors = require('cors');
 
 const app = express();
-app.use(cors());
+app.use(cors({
+    origin: ['http://localhost:3000/', 'https://vermillion-zabaione-fa2b4b.netlify.app/']
+}));
 
 const client = new MongoClient(uri, {
   serverApi: {
