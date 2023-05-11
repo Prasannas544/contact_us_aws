@@ -1,44 +1,40 @@
-
-const { MongoClient, ServerApiVersion } = require('mongodb');
-const uri = "mongodb+srv://prasannas544:OVnRMt463dBd5jTT@cluster0.lbgpcrz.mongodb.net/?retryWrites=true&w=majority";
-const express = require('express');
-const bodyParser = require('body-parser');
-const cors = require('cors');
+const {MongoClient, ServerApiVersion} = require("mongodb");
+const uri =
+  "mongodb+srv://prasannas544:OVnRMt463dBd5jTT@cluster0.lbgpcrz.mongodb.net/?retryWrites=true&w=majority";
+const express = require("express");
+const bodyParser = require("body-parser");
+const cors = require("cors");
 
 const app = express();
-app.use(cors({
-    origin: ['http://localhost:3000/', 'https://vermillion-zabaione-fa2b4b.netlify.app/']
-}));
+app.use(cors());
 
 const client = new MongoClient(uri, {
   serverApi: {
     version: ServerApiVersion.v1,
     strict: true,
     deprecationErrors: true,
-  }
+  },
 });
-
 
 // Set up body parser middleware to parse JSON from POST requests
 app.use(bodyParser.json());
-app.get('/', (req, res) => {
-  res.send('Hello World!');
-
+app.get("/", (req, res) => {
+  res.send("Hello World!");
 });
 
 // Set up endpoint to handle POST requests
-app.post('/submit-form-data', (req, res) => {
+app.post("/submit-form-data", (req, res) => {
   // Extract form data from the request body
-  res.setHeader('Access-Control-Allow-Origin', '*');
-  res.setHeader('Access-Control-Allow-Methods', 'GET, POST, PUT, DELETE');
-  res.setHeader('Access-Control-Allow-Headers', 'Content-Type');
-  const { name, email, topic, message } = req.body;
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  const {name, email, topic, message} = req.body;
   run(name, email, topic, message).catch(console.dir);
   let data = {
-    status: '200',
-    msg: 'Contact made successfully'
-  }
-  res.json(data)
+    status: "200",
+    msg: "Contact made successfully",
+  };
+  res.json(data);
 });
 
 // Start server listening on specified port
@@ -62,16 +58,14 @@ async function run(name, email, topic, message) {
       name: name,
       email: email,
       topic: topic,
-      msg: message
+      msg: message,
     });
-    console.log(`${result.insertedCount} documents were inserted with _id: ${result.insertedId}`);
-
+    console.log(
+      `${result.insertedCount} documents were inserted with _id: ${result.insertedId}`
+    );
   } finally {
     // Ensures that the client will close when you finish/error
     await client.close();
     console.log("Connection closed");
   }
 }
-
-
-
